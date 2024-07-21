@@ -57,12 +57,19 @@ class AvailableSlotsModel(models.Model):
 
 
 class ChoosenSlotsModel(models.Model):
+    statuses = (
+        ('registred', 'Зарегистировано'),
+        ('aborted', 'Отклонено'),
+        ('confirmed', 'Подтверждено'),
+        ('done', 'Выполнено'),
+    )
     master = models.ForeignKey(MasterModel, on_delete=models.CASCADE,
                                verbose_name='Мастер', limit_choices_to={'is_active': True})
     slot = models.ForeignKey(AvailableSlotsModel, on_delete=models.CASCADE,
                               verbose_name='Слот', limit_choices_to={'is_active': True})
     service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE,
                               verbose_name='Услуга', limit_choices_to={'is_active': True})
+    status = models.CharField(choices=statuses, verbose_name='Статус записи', default='', max_length=100)
     name = models.CharField(max_length=250, verbose_name='Имя Клиента')
     phone = models.CharField(max_length=250, verbose_name='Контактный номер', blank=True, null=True)
     comment = models.CharField(max_length=250, verbose_name='Комментарий', blank=True, null=True)
